@@ -1,0 +1,34 @@
+@startuml
+
+skin rose
+autonumber
+
+actor user
+participant app
+participant server
+database db
+
+user->app : нажатие кнопки
+activate user
+
+app-->server: http запрос
+activate server
+
+alt successful case 
+    server->server : валидация данных
+    server->db : sql-запрос
+    activate db
+
+    db-->>server : возвращает набор данных
+    deactivate db
+
+    server-->>app : возвращает json с ответом 
+else unsuccessful case
+    server-->>app : ошибка 500
+end
+    deactivate server
+
+app-->>user : отображение ответа
+deactivate user
+
+@enduml
